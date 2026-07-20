@@ -1,0 +1,49 @@
+generated: '2026-07-19'
+method: searched
+source: openapi/holvi-psd2-openapi.yml
+docs: https://holvi.github.io/psd2-api/authentication.html
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+  model: >-
+    Two-party authentication. The TPP proves itself with an eIDAS QSEAL client certificate,
+    a Holvi Client-Id/Client-Secret pair, and a per-request HTTP message signature (Draft
+    Cavage HTTP Signatures v10, RSA-SHA256, key >= 2048-bit) over (request-target), Host,
+    Date and, for write methods, Content-Type and Digest (RFC 3230 SHA-256). The end user
+    (PSU) grants consent via a redirect login at https://psd2.holvi.com/login/ and the
+    returned authorization code is exchanged for a JWT bearer access token used in the
+    Authorization header. Onboarding endpoints are exempt from the signature requirement.
+schemes:
+- name: HolviClientId
+  type: apiKey
+  in: header
+  parameter: X-Holvi-Client-Id
+  description: Client ID identifying the TPP application (from approved onboarding).
+  sources:
+  - openapi/holvi-psd2-openapi.yml
+- name: HolviClientSecret
+  type: apiKey
+  in: header
+  parameter: X-Holvi-Client-Secret
+  description: Client Secret authenticating the TPP (from approved onboarding).
+  sources:
+  - openapi/holvi-psd2-openapi.yml
+- name: HolviSignatureHeader
+  type: apiKey
+  in: header
+  parameter: Signature
+  description: Application-level HTTP message signature (Draft Cavage HTTP Signatures v10, RSA-SHA256,
+    key >= 2048-bit) over (request-target), Host, Date [, Content-Type, Digest for write methods],
+    keyId = Client-Id, using the eIDAS QSEAL certificate.
+  sources:
+  - openapi/holvi-psd2-openapi.yml
+- name: HolviBearer
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  description: PSU consent JWT access token from the consent token exchange.
+  sources:
+  - openapi/holvi-psd2-openapi.yml
