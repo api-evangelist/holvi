@@ -1,0 +1,336 @@
+openapi: 3.0.3
+info:
+  title: Holvi PSD2 Account Information API
+  version: '2.0'
+  description: PSD2 (Payment Services Directive 2) API for licensed Third Party Providers (TPPs) to access Holvi customer payment accounts (AISP) and initiate SEPA / SEPA Instant / SWIFT payments (PISP) with Strong Customer Authentication, plus optional Verification of Payee (VOP). TPPs authenticate with an eIDAS QSEAL client certificate, a Holvi Client-Id/Client-Secret pair, and per-request HTTP message signatures (Draft Cavage HTTP Signatures v10, RSA-SHA256). End users (PSUs) grant consent through a redirect login flow that yields a JWT bearer access token.
+  contact:
+    name: Holvi Developer Support
+    email: developer@holvi.com
+    url: https://holvi-developer.zendesk.com/hc/en-gb
+  x-api-evangelist:
+    method: generated
+    source: https://holvi.github.io/psd2-api/
+    generated: '2026-07-19'
+servers:
+- url: https://api.psd2.holvi.com
+  description: Production
+security:
+- HolviClientId: []
+  HolviClientSecret: []
+  HolviSignatureHeader: []
+  HolviBearer: []
+tags:
+- name: Account Information
+  description: AISP endpoints - read Holvi customer payment accounts and payments.
+paths:
+  /api/v2/payment-accounts/:
+    get:
+      tags:
+      - Account Information
+      operationId: listPaymentAccounts
+      summary: List payment accounts
+      description: Returns the list of payment accounts for the PSU the JWT token was issued for. A Holvi customer can have multiple payment accounts; each holds a single currency.
+      security:
+      - HolviClientId: []
+        HolviClientSecret: []
+        HolviSignatureHeader: []
+        HolviBearer: []
+      responses:
+        '200':
+          description: No error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentAccount'
+        '401':
+          description: Unsuccessful authentication
+  /api/v2/payment-accounts/{uuid}/:
+    get:
+      tags:
+      - Account Information
+      operationId: getPaymentAccount
+      summary: Get a payment account
+      description: Returns a single payment account by its UUID.
+      security:
+      - HolviClientId: []
+        HolviClientSecret: []
+        HolviSignatureHeader: []
+        HolviBearer: []
+      parameters:
+      - name: uuid
+        in: path
+        required: true
+        description: UUID of the payment account.
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: No error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentAccount'
+        '401':
+          description: Unsuccessful authentication
+  /api/v2/payment-accounts/{uuid}/payments/:
+    get:
+      tags:
+      - Account Information
+      operationId: listPayments
+      summary: List payments for a payment account
+      description: Returns a paginated list of payments for a payment account. Only payments from the last 365 days are returned.
+      security:
+      - HolviClientId: []
+        HolviClientSecret: []
+        HolviSignatureHeader: []
+        HolviBearer: []
+      parameters:
+      - name: uuid
+        in: path
+        required: true
+        description: UUID of the payment account.
+        schema:
+          type: string
+          format: uuid
+      - name: state
+        in: query
+        description: One of unverified, paid, notenoughbalance, cancelled, scheduled.
+        schema:
+          type: string
+          enum:
+          - unverified
+          - paid
+          - notenoughbalance
+          - cancelled
+          - scheduled
+      - name: direction
+        in: query
+        description: One of in, out.
+        schema:
+          type: string
+          enum:
+          - in
+          - out
+      - name: from_date
+        in: query
+        description: Filter by booking date (YYYY-MM-DD). Cannot be more than 365 days in the past.
+        schema:
+          type: string
+          format: date
+      - name: to_date
+        in: query
+        description: Filter by booking date (YYYY-MM-DD).
+        schema:
+          type: string
+          format: date
+      - name: page
+        in: query
+        description: Page number (page-number pagination).
+        schema:
+          type: integer
+          minimum: 1
+      responses:
+        '200':
+          description: No error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPayments'
+        '401':
+          description: Unsuccessful authentication
+  /api/v2/payment-accounts/{payment_account_uuid}/payments/{payment_uuid}/:
+    get:
+      tags:
+      - Account Information
+      operationId: getPayment
+      summary: Get a payment
+      description: Returns a single payment by UUID within a payment account.
+      security:
+      - HolviClientId: []
+        HolviClientSecret: []
+        HolviSignatureHeader: []
+        HolviBearer: []
+      parameters:
+      - name: payment_account_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: payment_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: No error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        '401':
+          description: Unsuccessful authentication
+components:
+  schemas:
+    Payment:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        counterparty:
+          $ref: '#/components/schemas/Counterparty'
+        amount:
+          type: string
+        currency:
+          type: string
+        method:
+          type: string
+          enum:
+          - sepa
+          - international
+        booking_date:
+          type: string
+          format: date
+          nullable: true
+        due_date:
+          type: string
+          format: date
+          nullable: true
+        execution_at:
+          type: string
+          format: date-time
+          nullable: true
+        state:
+          type: string
+          enum:
+          - unverified
+          - verified
+          - paid
+          - notenoughbalance
+          - cancelled
+          - scheduled
+        direction:
+          type: string
+          enum:
+          - in
+          - out
+        is_credit:
+          type: boolean
+          nullable: true
+        structured_reference:
+          type: string
+          maxLength: 35
+        unstructured_reference:
+          type: string
+          maxLength: 140
+        end_to_end_id:
+          type: string
+          maxLength: 36
+    PaginatedPayments:
+      type: object
+      description: Django-REST-Framework style page-number pagination envelope.
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          nullable: true
+        previous:
+          type: string
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Payment'
+    Counterparty:
+      type: object
+      properties:
+        name:
+          type: string
+        bic:
+          type: string
+        account_identifier:
+          type: string
+          description: IBAN or national account number
+        account_identifier_type:
+          type: string
+          enum:
+          - iban
+          - national_account_number
+        street:
+          type: string
+        building:
+          type: string
+          maxLength: 16
+        postcode:
+          type: string
+          maxLength: 16
+        region:
+          type: string
+          maxLength: 35
+        city:
+          type: string
+        country:
+          type: string
+          description: ISO 3166-1 alpha-2 country code
+        additional_info:
+          type: string
+    PaymentAccount:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        currency:
+          type: string
+          description: Currency of the payment account
+        type:
+          type: string
+          enum:
+          - psd
+          - credit
+        name:
+          type: string
+          description: User-designated account name
+        default:
+          type: boolean
+        iban:
+          type: string
+        bic:
+          type: string
+        balance:
+          type: string
+          description: Balance without account reservations
+        available_balance:
+          type: string
+          description: Balance including account reservations
+        state:
+          type: string
+          example: active
+  securitySchemes:
+    HolviClientId:
+      type: apiKey
+      in: header
+      name: X-Holvi-Client-Id
+      description: Client ID identifying the TPP application (from approved onboarding).
+    HolviClientSecret:
+      type: apiKey
+      in: header
+      name: X-Holvi-Client-Secret
+      description: Client Secret authenticating the TPP (from approved onboarding).
+    HolviSignatureHeader:
+      type: apiKey
+      in: header
+      name: Signature
+      description: Application-level HTTP message signature (Draft Cavage HTTP Signatures v10, RSA-SHA256, key >= 2048-bit) over (request-target), Host, Date [, Content-Type, Digest for write methods], keyId = Client-Id, using the eIDAS QSEAL certificate.
+    HolviBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: PSU consent JWT access token from the consent token exchange.

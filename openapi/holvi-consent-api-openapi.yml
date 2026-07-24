@@ -1,0 +1,96 @@
+openapi: 3.0.3
+info:
+  title: Holvi PSD2 Account Information Consent API
+  version: '2.0'
+  description: PSD2 (Payment Services Directive 2) API for licensed Third Party Providers (TPPs) to access Holvi customer payment accounts (AISP) and initiate SEPA / SEPA Instant / SWIFT payments (PISP) with Strong Customer Authentication, plus optional Verification of Payee (VOP). TPPs authenticate with an eIDAS QSEAL client certificate, a Holvi Client-Id/Client-Secret pair, and per-request HTTP message signatures (Draft Cavage HTTP Signatures v10, RSA-SHA256). End users (PSUs) grant consent through a redirect login flow that yields a JWT bearer access token.
+  contact:
+    name: Holvi Developer Support
+    email: developer@holvi.com
+    url: https://holvi-developer.zendesk.com/hc/en-gb
+  x-api-evangelist:
+    method: generated
+    source: https://holvi.github.io/psd2-api/
+    generated: '2026-07-19'
+servers:
+- url: https://api.psd2.holvi.com
+  description: Production
+security:
+- HolviClientId: []
+  HolviClientSecret: []
+  HolviSignatureHeader: []
+  HolviBearer: []
+tags:
+- name: Consent
+  description: PSU authentication and consent token exchange.
+paths:
+  /api/v2/consent/initiate/usernamepassword/:
+    post:
+      tags:
+      - Consent
+      operationId: initiateConsentUsernamePassword
+      summary: Initiate a user consent access token
+      description: Initiates a Payment Service User (PSU) consent and returns an access token used in the Authorization header of subsequent Account Information and Payment Initiation calls. Does not require the request Signature/Digest headers.
+      responses:
+        '200':
+          description: Access token issued
+        '401':
+          description: Unsuccessful authentication
+  /api/v2/consent/token/{code}/exchange/:
+    get:
+      tags:
+      - Consent
+      operationId: exchangeConsentToken
+      summary: Exchange an authorization code for a JWT token
+      description: After the PSU logs in at https://psd2.holvi.com/login/ and is redirected back with a `code`, exchange that code for a JWT bearer token.
+      parameters:
+      - name: code
+        in: path
+        required: true
+        description: Authorization code from the login redirect (token_uuid).
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Token issued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsentTokenResponse'
+        '401':
+          description: Unsuccessful authentication
+        '404':
+          description: token_uuid not found, user has not given authorization (or declined)
+components:
+  schemas:
+    ConsentTokenResponse:
+      type: object
+      properties:
+        token_type:
+          type: string
+          example: Bearer
+        id_token:
+          type: string
+        expires_in:
+          type: integer
+          example: 7750774
+  securitySchemes:
+    HolviClientId:
+      type: apiKey
+      in: header
+      name: X-Holvi-Client-Id
+      description: Client ID identifying the TPP application (from approved onboarding).
+    HolviClientSecret:
+      type: apiKey
+      in: header
+      name: X-Holvi-Client-Secret
+      description: Client Secret authenticating the TPP (from approved onboarding).
+    HolviSignatureHeader:
+      type: apiKey
+      in: header
+      name: Signature
+      description: Application-level HTTP message signature (Draft Cavage HTTP Signatures v10, RSA-SHA256, key >= 2048-bit) over (request-target), Host, Date [, Content-Type, Digest for write methods], keyId = Client-Id, using the eIDAS QSEAL certificate.
+    HolviBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: PSU consent JWT access token from the consent token exchange.

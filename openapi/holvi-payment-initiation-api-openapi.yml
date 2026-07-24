@@ -1,0 +1,291 @@
+openapi: 3.0.3
+info:
+  title: Holvi PSD2 Account Information Payment Initiation API
+  version: '2.0'
+  description: PSD2 (Payment Services Directive 2) API for licensed Third Party Providers (TPPs) to access Holvi customer payment accounts (AISP) and initiate SEPA / SEPA Instant / SWIFT payments (PISP) with Strong Customer Authentication, plus optional Verification of Payee (VOP). TPPs authenticate with an eIDAS QSEAL client certificate, a Holvi Client-Id/Client-Secret pair, and per-request HTTP message signatures (Draft Cavage HTTP Signatures v10, RSA-SHA256). End users (PSUs) grant consent through a redirect login flow that yields a JWT bearer access token.
+  contact:
+    name: Holvi Developer Support
+    email: developer@holvi.com
+    url: https://holvi-developer.zendesk.com/hc/en-gb
+  x-api-evangelist:
+    method: generated
+    source: https://holvi.github.io/psd2-api/
+    generated: '2026-07-19'
+servers:
+- url: https://api.psd2.holvi.com
+  description: Production
+security:
+- HolviClientId: []
+  HolviClientSecret: []
+  HolviSignatureHeader: []
+  HolviBearer: []
+tags:
+- name: Payment Initiation
+  description: PISP endpoints - initiate and confirm SEPA / SEPA Instant / SWIFT payments.
+paths:
+  /api/v2/payment-initiation/:
+    post:
+      tags:
+      - Payment Initiation
+      operationId: initiatePayment
+      summary: Initiate a payment
+      description: 'Initiates a payment from a Holvi customer payment account. Supports SEPA, SEPA Instant and SWIFT (international) payments. After initiation the customer must complete Strong Customer Authentication (SCA) on their phone; poll the payment state until it becomes `verified`. Set `execute_verification_of_payee: true` to run Verification of Payee (VOP) - a perfect match returns 201, a fuzzy/no match returns 202 requiring confirmation.'
+      security:
+      - HolviClientId: []
+        HolviClientSecret: []
+        HolviSignatureHeader: []
+        HolviBearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentInitiationRequest'
+      responses:
+        '201':
+          description: Payment created successfully (perfect match or VOP disabled)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        '202':
+          description: VOP verification requires user confirmation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VopPendingResponse'
+        '400':
+          description: VOP verification failed or invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unsuccessful authentication
+        '403':
+          description: Forbidden. The user lacks payment-initiation permission or is not verified.
+        '503':
+          description: Service unavailable
+  /api/v2/payment-initiation/{payment_initialization_id}/confirm-vop:
+    post:
+      tags:
+      - Payment Initiation
+      operationId: confirmVop
+      summary: Confirm a payment after VOP fuzzy/no match
+      description: When VOP returns a fuzzy match or no match (202), call this endpoint to confirm and proceed with the payment after the user has reviewed the name mismatch.
+      security:
+      - HolviClientId: []
+        HolviClientSecret: []
+        HolviSignatureHeader: []
+        HolviBearer: []
+      parameters:
+      - name: payment_initialization_id
+        in: path
+        required: true
+        description: The ID returned from the initial VOP payment request.
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '201':
+          description: Payment confirmed and created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        '401':
+          description: Unsuccessful authentication
+        '403':
+          description: Insufficient permissions
+        '404':
+          description: Payment initialization not found or not in confirmable state
+        '503':
+          description: Service unavailable
+components:
+  schemas:
+    Counterparty:
+      type: object
+      properties:
+        name:
+          type: string
+        bic:
+          type: string
+        account_identifier:
+          type: string
+          description: IBAN or national account number
+        account_identifier_type:
+          type: string
+          enum:
+          - iban
+          - national_account_number
+        street:
+          type: string
+        building:
+          type: string
+          maxLength: 16
+        postcode:
+          type: string
+          maxLength: 16
+        region:
+          type: string
+          maxLength: 35
+        city:
+          type: string
+        country:
+          type: string
+          description: ISO 3166-1 alpha-2 country code
+        additional_info:
+          type: string
+    VopPendingResponse:
+      type: object
+      properties:
+        payment_initialization_id:
+          type: string
+          format: uuid
+        vop_result:
+          $ref: '#/components/schemas/VopResult'
+        requires_confirmation:
+          type: boolean
+    VopResult:
+      type: object
+      properties:
+        request_uuid:
+          type: string
+          format: uuid
+        match_result:
+          type: string
+          enum:
+          - match
+          - close-match
+          - no-match
+        match_name:
+          type: string
+        confidence_score:
+          type: number
+    PaymentInitiationRequest:
+      type: object
+      required:
+      - payment_account
+      - amount
+      - counterparty
+      properties:
+        payment_account:
+          type: string
+          format: uuid
+        amount:
+          type: string
+        currency:
+          type: string
+          description: ISO 4217; defaults to account currency
+        counterparty:
+          $ref: '#/components/schemas/Counterparty'
+        due_date:
+          type: string
+          format: date
+        unstructured_reference:
+          type: string
+          maxLength: 140
+        structured_reference:
+          type: string
+          maxLength: 35
+        end_to_end_id:
+          type: string
+          maxLength: 36
+        method:
+          type: string
+          enum:
+          - sepa
+          - international
+          default: sepa
+        instant:
+          type: boolean
+          default: false
+          description: Request a SEPA Instant payment
+        execute_verification_of_payee:
+          type: boolean
+          default: false
+          description: Enable Verification of Payee (VOP).
+    Payment:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        counterparty:
+          $ref: '#/components/schemas/Counterparty'
+        amount:
+          type: string
+        currency:
+          type: string
+        method:
+          type: string
+          enum:
+          - sepa
+          - international
+        booking_date:
+          type: string
+          format: date
+          nullable: true
+        due_date:
+          type: string
+          format: date
+          nullable: true
+        execution_at:
+          type: string
+          format: date-time
+          nullable: true
+        state:
+          type: string
+          enum:
+          - unverified
+          - verified
+          - paid
+          - notenoughbalance
+          - cancelled
+          - scheduled
+        direction:
+          type: string
+          enum:
+          - in
+          - out
+        is_credit:
+          type: boolean
+          nullable: true
+        structured_reference:
+          type: string
+          maxLength: 35
+        unstructured_reference:
+          type: string
+          maxLength: 140
+        end_to_end_id:
+          type: string
+          maxLength: 36
+    Error:
+      type: object
+      description: Holvi PSD2 error envelope.
+      properties:
+        error:
+          type: string
+        details:
+          type: string
+  securitySchemes:
+    HolviClientId:
+      type: apiKey
+      in: header
+      name: X-Holvi-Client-Id
+      description: Client ID identifying the TPP application (from approved onboarding).
+    HolviClientSecret:
+      type: apiKey
+      in: header
+      name: X-Holvi-Client-Secret
+      description: Client Secret authenticating the TPP (from approved onboarding).
+    HolviSignatureHeader:
+      type: apiKey
+      in: header
+      name: Signature
+      description: Application-level HTTP message signature (Draft Cavage HTTP Signatures v10, RSA-SHA256, key >= 2048-bit) over (request-target), Host, Date [, Content-Type, Digest for write methods], keyId = Client-Id, using the eIDAS QSEAL certificate.
+    HolviBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: PSU consent JWT access token from the consent token exchange.
