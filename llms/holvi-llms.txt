@@ -1,0 +1,36 @@
+# Holvi
+
+> Holvi is a Finnish digital business-banking service for freelancers, founders and SMEs (founded 2011, Helsinki; a regulated Authorised Payment Institution). It offers a business account with IBAN, a Business Mastercard, invoicing, expense tracking and bookkeeping prep across Finland, Germany and Austria. For developers, Holvi publishes a PSD2 API v2.0 for licensed Third Party Providers (AISP account information + PISP payment initiation, with Verification of Payee).
+
+## APIs
+- [Holvi PSD2 API v2.0 reference](https://holvi.github.io/psd2-api/): Account information (AISP), payment initiation (PISP, SEPA/SEPA Instant/SWIFT), Verification of Payee, certificate renewal. Base URL https://api.psd2.holvi.com.
+
+## Specs
+- [Reconstructed OpenAPI (generated from the published reference)](openapi/holvi-psd2-openapi.yml)
+- [Authentication profile](authentication/holvi-authentication.yml)
+- [Agentic access contract](agentic-access/holvi-agentic-access.yml)
+- [API conventions](conventions/holvi-conventions.yml)
+- [Error / status catalog](errors/holvi-problem-types.yml)
+- [Lifecycle & versioning](lifecycle/holvi-lifecycle.yml)
+- [Conformance (PSD2, eIDAS, SCA, HTTP signatures)](conformance/holvi-conformance.yml)
+- [Data model](data-model/holvi-data-model.yml)
+- [Candidate MCP tools](mcp/holvi-mcp.yml)
+
+## Docs
+- [Developer portal](https://holvi-developer.zendesk.com/hc/en-gb)
+- [Quickstart](https://holvi.github.io/psd2-api/initial_steps/index.html)
+- [Authentication](https://holvi.github.io/psd2-api/authentication.html)
+- [Changelog](https://holvi.github.io/psd2-api/changelog.html)
+- [Help centre](https://support.holvi.com/hc/en-gb)
+- [GitHub organization](https://github.com/holvi)
+
+## Agent Skills
+- [Read account information (AISP)](skills/holvi-read-account-information.md)
+- [Initiate a SEPA payment (PISP)](skills/holvi-initiate-sepa-payment.md)
+- [Verify payee then pay (VOP)](skills/holvi-verify-payee-and-pay.md)
+
+## Company
+- [Website](https://www.holvi.com/)
+- [Pricing](https://www.holvi.com/pricing/)
+- [Blog](https://blog.holvi.com/)
+- Developer contact: developer@holvi.com

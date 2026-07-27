@@ -1,0 +1,22 @@
+generated: '2026-07-19'
+method: searched
+source: https://holvi.github.io/psd2-api/
+versioning:
+  scheme: uri-path
+  current: v2
+  docs: https://holvi.github.io/psd2-api/
+changelog:
+  url: https://holvi.github.io/psd2-api/changelog.html
+deprecation:
+  policy_documented: false
+  sunset_header: false
+sla:
+  documented: false
+status_page:
+  found: false
+  notes: No dedicated developer/API status page located for the PSD2 API.
+deprecated_operations: []
+notes: >-
+  Holvi runs a versioned PSD2 API (current major v2, URI-path versioned as /api/v2/).
+  The developer reference publishes a changelog page. No public deprecation policy,
+  SLA, or API status page was found.

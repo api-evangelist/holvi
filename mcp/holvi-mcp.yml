@@ -1,0 +1,39 @@
+generated: '2026-07-19'
+method: derived
+status: candidate
+source: openapi/holvi-psd2-openapi.yml
+# No official/hosted Holvi MCP server was found. This is a CANDIDATE tool list derived
+# one-to-one from the documented PSD2 API operations. Note: real use requires an eIDAS
+# QSEAL certificate, Holvi TPP credentials, per-request HTTP signatures, and a PSU consent
+# JWT - an MCP deployment must broker those.
+server:
+  name: holvi-psd2
+  transport: http
+tools:
+  - name: initiate_consent_username_password
+    description: Initiate a PSU consent and obtain an access token.
+    source_operation: openapi/holvi-psd2-openapi.yml#initiateConsentUsernamePassword
+  - name: exchange_consent_token
+    description: Exchange a login authorization code for a JWT bearer token.
+    source_operation: openapi/holvi-psd2-openapi.yml#exchangeConsentToken
+  - name: list_payment_accounts
+    description: List the PSU's Holvi payment accounts.
+    source_operation: openapi/holvi-psd2-openapi.yml#listPaymentAccounts
+  - name: get_payment_account
+    description: Get a single payment account by UUID.
+    source_operation: openapi/holvi-psd2-openapi.yml#getPaymentAccount
+  - name: list_payments
+    description: List payments for a payment account (last 365 days), with state/direction/date filters.
+    source_operation: openapi/holvi-psd2-openapi.yml#listPayments
+  - name: get_payment
+    description: Get a single payment by UUID.
+    source_operation: openapi/holvi-psd2-openapi.yml#getPayment
+  - name: initiate_payment
+    description: Initiate a SEPA / SEPA Instant / SWIFT payment (optionally with VOP).
+    source_operation: openapi/holvi-psd2-openapi.yml#initiatePayment
+  - name: confirm_vop
+    description: Confirm a payment after a VOP fuzzy/no-match result.
+    source_operation: openapi/holvi-psd2-openapi.yml#confirmVop
+  - name: renew_certificate
+    description: Renew the TPP eIDAS client certificate for an application.
+    source_operation: openapi/holvi-psd2-openapi.yml#renewCertificate

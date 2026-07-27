@@ -1,8 +1,28 @@
 aid: holvi
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/holvi.png
 name: Holvi
-description: Holvi is a company surfaced as a portfolio company of seedcamp, speedinvest and added to
-  the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment
-  pipeline.
+description: >-
+  Holvi is a Finnish digital business-banking service for freelancers, founders and small
+  businesses, founded in Helsinki in 2011 and operating as a regulated Authorised Payment
+  Institution supervised by the Finnish Financial Supervisory Authority. It combines a
+  business account with its own IBAN, a Holvi Business Mastercard, invoicing, expense
+  tracking, VAT calculation and bookkeeping preparation in one dashboard, serving more than
+  150,000 businesses across Europe with a focus on Finland, Germany and Austria. For
+  developers, Holvi publishes a PSD2 API v2.0 for licensed Third Party Providers, exposing
+  account information (AISP) and payment initiation (PISP, SEPA / SEPA Instant / SWIFT) with
+  Strong Customer Authentication and optional Verification of Payee.
 url: https://raw.githubusercontent.com/api-evangelist/holvi/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -13,15 +33,136 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-19'
 tags:
 - Company
-apis: []
+- Banking
+- Fintech
+- Payments
+- Business Banking
+- PSD2
+- Open Banking
+- SEPA
+- Finland
+apis:
+- aid: holvi:holvi-account-information-api
+  name: Holvi Account Information API
+  description: AISP endpoints - read Holvi customer payment accounts and payments.
+  humanURL: https://holvi.github.io/psd2-api/
+  baseURL: https://api.psd2.holvi.com
+  tags:
+  - Account Information
+  properties:
+  - type: OpenAPI
+    url: openapi/holvi-account-information-api-openapi.yml
+  - type: Documentation
+    url: https://holvi.github.io/psd2-api/
+  - type: Authentication
+    url: authentication/holvi-authentication.yml
+- aid: holvi:holvi-consent-api
+  name: Holvi Consent API
+  description: PSU authentication and consent token exchange.
+  humanURL: https://holvi.github.io/psd2-api/
+  baseURL: https://api.psd2.holvi.com
+  tags:
+  - Consent
+  properties:
+  - type: OpenAPI
+    url: openapi/holvi-consent-api-openapi.yml
+  - type: Documentation
+    url: https://holvi.github.io/psd2-api/
+  - type: Authentication
+    url: authentication/holvi-authentication.yml
+- aid: holvi:holvi-payment-initiation-api
+  name: Holvi Payment Initiation API
+  description: PISP endpoints - initiate and confirm SEPA / SEPA Instant / SWIFT payments.
+  humanURL: https://holvi.github.io/psd2-api/
+  baseURL: https://api.psd2.holvi.com
+  tags:
+  - Payment Initiation
+  properties:
+  - type: OpenAPI
+    url: openapi/holvi-payment-initiation-api-openapi.yml
+  - type: Documentation
+    url: https://holvi.github.io/psd2-api/
+  - type: Authentication
+    url: authentication/holvi-authentication.yml
+- aid: holvi:holvi-third-party-provider-api
+  name: Holvi Third Party Provider API
+  description: TPP certificate lifecycle.
+  humanURL: https://holvi.github.io/psd2-api/
+  baseURL: https://api.psd2.holvi.com
+  tags:
+  - Third Party Provider
+  properties:
+  - type: OpenAPI
+    url: openapi/holvi-third-party-provider-api-openapi.yml
+  - type: Documentation
+    url: https://holvi.github.io/psd2-api/
+  - type: Authentication
+    url: authentication/holvi-authentication.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: AgenticAccess
+  url: agentic-access/holvi-agentic-access.yml
+- type: Authentication
+  url: authentication/holvi-authentication.yml
+- type: DomainSecurity
+  url: security/holvi-domain-security.yml
+- type: OpenAPI
+  url: openapi/holvi-psd2-openapi.yml
+- type: Conventions
+  url: conventions/holvi-conventions.yml
+- type: ErrorCatalog
+  url: errors/holvi-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/holvi-lifecycle.yml
+- type: Conformance
+  url: conformance/holvi-conformance.yml
+- type: WellKnown
+  url: well-known/holvi-well-known.yml
+- type: MCPServer
+  url: mcp/holvi-mcp.yml
+- type: DataModel
+  url: data-model/holvi-data-model.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/holvi-llms.txt
 - type: Website
-  url: http://holvi.com
+  url: https://www.holvi.com/
+- type: DeveloperPortal
+  url: https://holvi-developer.zendesk.com/hc/en-gb
+- type: Documentation
+  url: https://holvi.github.io/psd2-api/
+- type: APIReference
+  url: https://holvi.github.io/psd2-api/
+- type: GettingStarted
+  url: https://holvi.github.io/psd2-api/initial_steps/index.html
+- type: ChangeLog
+  url: https://holvi.github.io/psd2-api/changelog.html
+- type: Support
+  url: https://support.holvi.com/hc/en-gb
+- type: Blog
+  url: https://blog.holvi.com/
+- type: GitHubOrganization
+  url: https://github.com/holvi
+- type: Pricing
+  url: https://www.holvi.com/pricing/
+- type: SignUp
+  url: https://login.app.holvi.com/register
+- type: Login
+  url: https://login.app.holvi.com/
+- type: TermsOfService
+  url: https://support.holvi.com/hc/en-gb/articles/33569262656402-Terms-of-Service
+- type: PrivacyPolicy
+  url: https://support.holvi.com/hc/en-gb/articles/29831985498258-Privacy-Notice
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

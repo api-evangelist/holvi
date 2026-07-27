@@ -1,0 +1,20 @@
+{
+  "provider": "holvi",
+  "sources": [
+    "holvi-account-information-api-openapi.yml",
+    "holvi-consent-api-openapi.yml",
+    "holvi-payment-initiation-api-openapi.yml",
+    "holvi-third-party-provider-api-openapi.yml"
+  ],
+  "outputs": [
+    "holvi-account-information-api-openapi.yml",
+    "holvi-consent-api-openapi.yml",
+    "holvi-payment-initiation-api-openapi.yml",
+    "holvi-third-party-provider-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

@@ -1,0 +1,34 @@
+generated: '2026-07-19'
+method: searched
+source: https://holvi.github.io/psd2-api/
+standards:
+  - id: psd2
+    conforms: true
+    evidence: Holvi publishes a PSD2 (Payment Services Directive 2) API for licensed TPPs (AISP + PISP) as a regulated Authorised Payment Institution.
+  - id: sca-strong-customer-authentication
+    conforms: true
+    evidence: Payment initiation requires the customer to complete SCA on their phone before a payment moves to the verified state.
+  - id: eidas-qseal
+    conforms: true
+    evidence: TPPs must present an eIDAS QSEAL client certificate provided in the approved onboarding application.
+  - id: cavage-http-message-signatures
+    conforms: true
+    evidence: Every non-onboarding request must carry a Draft Cavage HTTP Signatures v10 signature, RSA-SHA256, key >= 2048-bit.
+  - id: rfc3230-digest
+    conforms: true
+    evidence: Digest header (RFC 3230) with a SHA-256 body hash is required on POST/PATCH/PUT.
+  - id: rfc7231-http-dates
+    conforms: true
+    evidence: The Date header must follow RFC 7231 full-date format.
+  - id: verification-of-payee
+    conforms: true
+    evidence: Optional VOP feature checks payee name against account holder before payment (match / close-match / no-match).
+  - id: oauth2
+    conforms: false
+    evidence: PSU authorization uses a redirect login + authorization-code-style exchange for a JWT, but not standard OAuth2 scopes or token endpoints; no oauth2 securityScheme is declared.
+  - id: berlin-group-nextgenpsd2
+    conforms: false
+    evidence: Holvi exposes its own PSD2 endpoint shape (/api/v2/payment-accounts, /api/v2/payment-initiation), not the Berlin Group NextGenPSD2 XS2A paths.
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: Errors use a flat {error, details} JSON envelope, not application/problem+json.

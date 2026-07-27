@@ -1,0 +1,448 @@
+openapi: 3.0.3
+# x-provenance: Reconstructed faithfully from Holvi's published PSD2 API v2.0 reference
+# (https://holvi.github.io/psd2-api/). Every path, field, and status code below is
+# documented on that reference. This is NOT an official Holvi-published OpenAPI file;
+# Holvi does not publish a machine-readable spec. method: generated.
+info:
+  title: Holvi PSD2 API
+  version: "2.0"
+  description: >-
+    PSD2 (Payment Services Directive 2) API for licensed Third Party Providers (TPPs)
+    to access Holvi customer payment accounts (AISP) and initiate SEPA / SEPA Instant /
+    SWIFT payments (PISP) with Strong Customer Authentication, plus optional Verification
+    of Payee (VOP). TPPs authenticate with an eIDAS QSEAL client certificate, a Holvi
+    Client-Id/Client-Secret pair, and per-request HTTP message signatures (Draft Cavage
+    HTTP Signatures v10, RSA-SHA256). End users (PSUs) grant consent through a redirect
+    login flow that yields a JWT bearer access token.
+  contact:
+    name: Holvi Developer Support
+    email: developer@holvi.com
+    url: https://holvi-developer.zendesk.com/hc/en-gb
+  x-api-evangelist:
+    method: generated
+    source: https://holvi.github.io/psd2-api/
+    generated: '2026-07-19'
+servers:
+  - url: https://api.psd2.holvi.com
+    description: Production
+tags:
+  - name: Account Information
+    description: AISP endpoints - read Holvi customer payment accounts and payments.
+  - name: Payment Initiation
+    description: PISP endpoints - initiate and confirm SEPA / SEPA Instant / SWIFT payments.
+  - name: Consent
+    description: PSU authentication and consent token exchange.
+  - name: Third Party Provider
+    description: TPP certificate lifecycle.
+paths:
+  /api/v2/consent/initiate/usernamepassword/:
+    post:
+      tags: [Consent]
+      operationId: initiateConsentUsernamePassword
+      summary: Initiate a user consent access token
+      description: >-
+        Initiates a Payment Service User (PSU) consent and returns an access token used
+        in the Authorization header of subsequent Account Information and Payment
+        Initiation calls. Does not require the request Signature/Digest headers.
+      responses:
+        '200':
+          description: Access token issued
+        '401':
+          description: Unsuccessful authentication
+  /api/v2/consent/token/{code}/exchange/:
+    get:
+      tags: [Consent]
+      operationId: exchangeConsentToken
+      summary: Exchange an authorization code for a JWT token
+      description: >-
+        After the PSU logs in at https://psd2.holvi.com/login/ and is redirected back
+        with a `code`, exchange that code for a JWT bearer token.
+      parameters:
+        - name: code
+          in: path
+          required: true
+          description: Authorization code from the login redirect (token_uuid).
+          schema: { type: string }
+      responses:
+        '200':
+          description: Token issued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsentTokenResponse'
+        '401':
+          description: Unsuccessful authentication
+        '404':
+          description: token_uuid not found, user has not given authorization (or declined)
+  /api/v2/payment-accounts/:
+    get:
+      tags: [Account Information]
+      operationId: listPaymentAccounts
+      summary: List payment accounts
+      description: >-
+        Returns the list of payment accounts for the PSU the JWT token was issued for.
+        A Holvi customer can have multiple payment accounts; each holds a single currency.
+      security:
+        - HolviClientId: []
+          HolviClientSecret: []
+          HolviSignatureHeader: []
+          HolviBearer: []
+      responses:
+        '200':
+          description: No error
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/PaymentAccount' }
+        '401':
+          description: Unsuccessful authentication
+  /api/v2/payment-accounts/{uuid}/:
+    get:
+      tags: [Account Information]
+      operationId: getPaymentAccount
+      summary: Get a payment account
+      description: Returns a single payment account by its UUID.
+      security:
+        - HolviClientId: []
+          HolviClientSecret: []
+          HolviSignatureHeader: []
+          HolviBearer: []
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          description: UUID of the payment account.
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: No error
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PaymentAccount' }
+        '401':
+          description: Unsuccessful authentication
+  /api/v2/payment-accounts/{uuid}/payments/:
+    get:
+      tags: [Account Information]
+      operationId: listPayments
+      summary: List payments for a payment account
+      description: >-
+        Returns a paginated list of payments for a payment account. Only payments from
+        the last 365 days are returned.
+      security:
+        - HolviClientId: []
+          HolviClientSecret: []
+          HolviSignatureHeader: []
+          HolviBearer: []
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          description: UUID of the payment account.
+          schema: { type: string, format: uuid }
+        - name: state
+          in: query
+          description: One of unverified, paid, notenoughbalance, cancelled, scheduled.
+          schema:
+            type: string
+            enum: [unverified, paid, notenoughbalance, cancelled, scheduled]
+        - name: direction
+          in: query
+          description: One of in, out.
+          schema:
+            type: string
+            enum: [in, out]
+        - name: from_date
+          in: query
+          description: Filter by booking date (YYYY-MM-DD). Cannot be more than 365 days in the past.
+          schema: { type: string, format: date }
+        - name: to_date
+          in: query
+          description: Filter by booking date (YYYY-MM-DD).
+          schema: { type: string, format: date }
+        - name: page
+          in: query
+          description: Page number (page-number pagination).
+          schema: { type: integer, minimum: 1 }
+      responses:
+        '200':
+          description: No error
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PaginatedPayments' }
+        '401':
+          description: Unsuccessful authentication
+  /api/v2/payment-accounts/{payment_account_uuid}/payments/{payment_uuid}/:
+    get:
+      tags: [Account Information]
+      operationId: getPayment
+      summary: Get a payment
+      description: Returns a single payment by UUID within a payment account.
+      security:
+        - HolviClientId: []
+          HolviClientSecret: []
+          HolviSignatureHeader: []
+          HolviBearer: []
+      parameters:
+        - name: payment_account_uuid
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+        - name: payment_uuid
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: No error
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Payment' }
+        '401':
+          description: Unsuccessful authentication
+  /api/v2/payment-initiation/:
+    post:
+      tags: [Payment Initiation]
+      operationId: initiatePayment
+      summary: Initiate a payment
+      description: >-
+        Initiates a payment from a Holvi customer payment account. Supports SEPA, SEPA
+        Instant and SWIFT (international) payments. After initiation the customer must
+        complete Strong Customer Authentication (SCA) on their phone; poll the payment
+        state until it becomes `verified`. Set `execute_verification_of_payee: true` to
+        run Verification of Payee (VOP) - a perfect match returns 201, a fuzzy/no match
+        returns 202 requiring confirmation.
+      security:
+        - HolviClientId: []
+          HolviClientSecret: []
+          HolviSignatureHeader: []
+          HolviBearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PaymentInitiationRequest' }
+      responses:
+        '201':
+          description: Payment created successfully (perfect match or VOP disabled)
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Payment' }
+        '202':
+          description: VOP verification requires user confirmation
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/VopPendingResponse' }
+        '400':
+          description: VOP verification failed or invalid request
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '401':
+          description: Unsuccessful authentication
+        '403':
+          description: >-
+            Forbidden. The user lacks payment-initiation permission or is not verified.
+        '503':
+          description: Service unavailable
+  /api/v2/payment-initiation/{payment_initialization_id}/confirm-vop:
+    post:
+      tags: [Payment Initiation]
+      operationId: confirmVop
+      summary: Confirm a payment after VOP fuzzy/no match
+      description: >-
+        When VOP returns a fuzzy match or no match (202), call this endpoint to confirm
+        and proceed with the payment after the user has reviewed the name mismatch.
+      security:
+        - HolviClientId: []
+          HolviClientSecret: []
+          HolviSignatureHeader: []
+          HolviBearer: []
+      parameters:
+        - name: payment_initialization_id
+          in: path
+          required: true
+          description: The ID returned from the initial VOP payment request.
+          schema: { type: string, format: uuid }
+      responses:
+        '201':
+          description: Payment confirmed and created successfully
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Payment' }
+        '401':
+          description: Unsuccessful authentication
+        '403':
+          description: Insufficient permissions
+        '404':
+          description: Payment initialization not found or not in confirmable state
+        '503':
+          description: Service unavailable
+  /api/v2/renew-certificate/:
+    post:
+      tags: [Third Party Provider]
+      operationId: renewCertificate
+      summary: Renew a TPP client certificate
+      description: Renews the eIDAS client certificate for a given application_id.
+      security:
+        - HolviBearer: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                new_certificate:
+                  type: string
+                  format: binary
+                  description: New client certificate (.pem) file.
+                application_id:
+                  type: string
+                  format: uuid
+              required: [new_certificate, application_id]
+      responses:
+        '200':
+          description: Certificate renewed correctly
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  application_id: { type: string, format: uuid }
+                  new_certificate: { type: string }
+        '400':
+          description: Invalid certificate, unknown application ID, or certificate file too big
+        '401':
+          description: Unsuccessful authentication
+components:
+  securitySchemes:
+    HolviClientId:
+      type: apiKey
+      in: header
+      name: X-Holvi-Client-Id
+      description: Client ID identifying the TPP application (from approved onboarding).
+    HolviClientSecret:
+      type: apiKey
+      in: header
+      name: X-Holvi-Client-Secret
+      description: Client Secret authenticating the TPP (from approved onboarding).
+    HolviSignatureHeader:
+      type: apiKey
+      in: header
+      name: Signature
+      description: >-
+        Application-level HTTP message signature (Draft Cavage HTTP Signatures v10,
+        RSA-SHA256, key >= 2048-bit) over (request-target), Host, Date [, Content-Type,
+        Digest for write methods], keyId = Client-Id, using the eIDAS QSEAL certificate.
+    HolviBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: PSU consent JWT access token from the consent token exchange.
+  schemas:
+    ConsentTokenResponse:
+      type: object
+      properties:
+        token_type: { type: string, example: Bearer }
+        id_token: { type: string }
+        expires_in: { type: integer, example: 7750774 }
+    Counterparty:
+      type: object
+      properties:
+        name: { type: string }
+        bic: { type: string }
+        account_identifier: { type: string, description: IBAN or national account number }
+        account_identifier_type: { type: string, enum: [iban, national_account_number] }
+        street: { type: string }
+        building: { type: string, maxLength: 16 }
+        postcode: { type: string, maxLength: 16 }
+        region: { type: string, maxLength: 35 }
+        city: { type: string }
+        country: { type: string, description: ISO 3166-1 alpha-2 country code }
+        additional_info: { type: string }
+    PaymentAccount:
+      type: object
+      properties:
+        uuid: { type: string, format: uuid }
+        currency: { type: string, description: Currency of the payment account }
+        type: { type: string, enum: [psd, credit] }
+        name: { type: string, description: User-designated account name }
+        default: { type: boolean }
+        iban: { type: string }
+        bic: { type: string }
+        balance: { type: string, description: Balance without account reservations }
+        available_balance: { type: string, description: Balance including account reservations }
+        state: { type: string, example: active }
+    Payment:
+      type: object
+      properties:
+        uuid: { type: string, format: uuid }
+        counterparty: { $ref: '#/components/schemas/Counterparty' }
+        amount: { type: string }
+        currency: { type: string }
+        method: { type: string, enum: [sepa, international] }
+        booking_date: { type: string, format: date, nullable: true }
+        due_date: { type: string, format: date, nullable: true }
+        execution_at: { type: string, format: date-time, nullable: true }
+        state:
+          type: string
+          enum: [unverified, verified, paid, notenoughbalance, cancelled, scheduled]
+        direction: { type: string, enum: [in, out] }
+        is_credit: { type: boolean, nullable: true }
+        structured_reference: { type: string, maxLength: 35 }
+        unstructured_reference: { type: string, maxLength: 140 }
+        end_to_end_id: { type: string, maxLength: 36 }
+    PaginatedPayments:
+      type: object
+      description: Django-REST-Framework style page-number pagination envelope.
+      properties:
+        count: { type: integer }
+        next: { type: string, nullable: true }
+        previous: { type: string, nullable: true }
+        results:
+          type: array
+          items: { $ref: '#/components/schemas/Payment' }
+    PaymentInitiationRequest:
+      type: object
+      required: [payment_account, amount, counterparty]
+      properties:
+        payment_account: { type: string, format: uuid }
+        amount: { type: string }
+        currency: { type: string, description: ISO 4217; defaults to account currency }
+        counterparty: { $ref: '#/components/schemas/Counterparty' }
+        due_date: { type: string, format: date }
+        unstructured_reference: { type: string, maxLength: 140 }
+        structured_reference: { type: string, maxLength: 35 }
+        end_to_end_id: { type: string, maxLength: 36 }
+        method: { type: string, enum: [sepa, international], default: sepa }
+        instant: { type: boolean, default: false, description: Request a SEPA Instant payment }
+        execute_verification_of_payee:
+          type: boolean
+          default: false
+          description: Enable Verification of Payee (VOP).
+    VopResult:
+      type: object
+      properties:
+        request_uuid: { type: string, format: uuid }
+        match_result: { type: string, enum: [match, close-match, no-match] }
+        match_name: { type: string }
+        confidence_score: { type: number }
+    VopPendingResponse:
+      type: object
+      properties:
+        payment_initialization_id: { type: string, format: uuid }
+        vop_result: { $ref: '#/components/schemas/VopResult' }
+        requires_confirmation: { type: boolean }
+    Error:
+      type: object
+      description: Holvi PSD2 error envelope.
+      properties:
+        error: { type: string }
+        details: { type: string }
+security:
+  - HolviClientId: []
+    HolviClientSecret: []
+    HolviSignatureHeader: []
+    HolviBearer: []

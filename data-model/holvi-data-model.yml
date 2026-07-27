@@ -1,0 +1,55 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/holvi-psd2-openapi.yml
+# Entity-relationship graph derived from the PSD2 API schemas and id-reference fields.
+entities:
+  - name: PaymentAccount
+    id: uuid
+    key_fields: [uuid, iban, bic, currency, type, balance, available_balance, state]
+    notes: A Holvi customer may hold multiple payment accounts; each holds a single currency.
+  - name: Payment
+    id: uuid
+    key_fields: [uuid, amount, currency, method, state, direction, due_date, execution_at]
+    notes: SEPA / SEPA Instant / SWIFT; state in unverified|verified|paid|notenoughbalance|cancelled|scheduled.
+  - name: Counterparty
+    key_fields: [name, account_identifier, account_identifier_type, bic]
+    notes: Embedded value object on a Payment (payer/payee).
+  - name: PaymentInitiation
+    id: payment_initialization_id
+    key_fields: [payment_initialization_id, requires_confirmation]
+    notes: Transient object returned when VOP requires confirmation before the payment is created.
+  - name: VopResult
+    id: request_uuid
+    key_fields: [request_uuid, match_result, match_name, confidence_score]
+  - name: ConsentToken
+    key_fields: [token_type, id_token, expires_in]
+    notes: PSU JWT bearer token scoping all account-information and payment-initiation calls.
+  - name: Certificate
+    id: application_id
+    key_fields: [application_id, new_certificate]
+    notes: TPP eIDAS client certificate bound to an onboarding application.
+relationships:
+  - from: PaymentAccount
+    to: Payment
+    type: has_many
+    via: payment_account
+  - from: Payment
+    to: Counterparty
+    type: has_one
+    via: counterparty
+  - from: Payment
+    to: PaymentAccount
+    type: belongs_to
+    via: payment_account
+  - from: PaymentInitiation
+    to: VopResult
+    type: has_one
+    via: vop_result
+  - from: PaymentInitiation
+    to: Payment
+    type: has_one
+    via: confirm-vop
+  - from: ConsentToken
+    to: PaymentAccount
+    type: has_many
+    via: PSU consent (JWT scopes the accessible accounts)

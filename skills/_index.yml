@@ -1,0 +1,16 @@
+generated: '2026-07-19'
+method: generated
+source: openapi/holvi-psd2-openapi.yml
+skills:
+  - file: holvi-read-account-information.md
+    name: Read Holvi account information (AISP)
+    api: openapi/holvi-psd2-openapi.yml
+    operations: [exchangeConsentToken, listPaymentAccounts, getPaymentAccount, listPayments, getPayment]
+  - file: holvi-initiate-sepa-payment.md
+    name: Initiate a Holvi SEPA payment (PISP)
+    api: openapi/holvi-psd2-openapi.yml
+    operations: [exchangeConsentToken, listPaymentAccounts, initiatePayment, getPayment]
+  - file: holvi-verify-payee-and-pay.md
+    name: Verify payee then pay (VOP)
+    api: openapi/holvi-psd2-openapi.yml
+    operations: [initiatePayment, confirmVop, getPayment]

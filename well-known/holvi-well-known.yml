@@ -1,0 +1,27 @@
+generated: '2026-07-19'
+method: searched
+# Probed the /.well-known/ discovery surface on each Holvi host. None are published.
+# api.psd2.holvi.com is not reachable for anonymous HTTPS discovery (connection refused /
+# error without a client certificate). psd2.holvi.com and holvi.com return 404 for all.
+hosts:
+  - host: https://api.psd2.holvi.com
+    documents:
+      - { path: /.well-known/security.txt, status: unreachable }
+      - { path: /.well-known/openid-configuration, status: unreachable }
+      - { path: /.well-known/oauth-authorization-server, status: unreachable }
+      - { path: /.well-known/api-catalog, status: unreachable }
+      - { path: /.well-known/ai-plugin.json, status: unreachable }
+  - host: https://psd2.holvi.com
+    documents:
+      - { path: /.well-known/security.txt, status: 404 }
+      - { path: /.well-known/openid-configuration, status: 404 }
+      - { path: /.well-known/oauth-authorization-server, status: 404 }
+      - { path: /.well-known/api-catalog, status: 404 }
+      - { path: /.well-known/ai-plugin.json, status: 404 }
+  - host: https://holvi.com
+    documents:
+      - { path: /.well-known/security.txt, status: 404 }
+      - { path: /.well-known/openid-configuration, status: 404 }
+      - { path: /.well-known/oauth-authorization-server, status: 404 }
+      - { path: /.well-known/api-catalog, status: 404 }
+      - { path: /.well-known/ai-plugin.json, status: 404 }

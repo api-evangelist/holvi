@@ -1,0 +1,62 @@
+generated: '2026-07-19'
+method: searched
+source: https://holvi.github.io/psd2-api/
+api: openapi/holvi-psd2-openapi.yml
+# Cross-cutting request/response semantics for the Holvi PSD2 API v2.0, captured from
+# the published reference. NOTE: no idempotency-key mechanism is documented, so no
+# type: Idempotency pointer is emitted (would be fabrication).
+authentication:
+  style: eIDAS QSEAL client certificate + HTTP message signature + Holvi Client-Id/Secret + PSU JWT bearer
+  request_headers:
+    - Host  # must be api.psd2.holvi.com in production
+    - Date  # RFC 7231 full date
+    - Digest  # RFC 3230, SHA-256 of body, on POST/PATCH/PUT
+    - Signature  # Draft Cavage HTTP Signatures v10, RSA-SHA256, >=2048-bit key
+    - X-Holvi-Client-Id
+    - X-Holvi-Client-Secret
+    - Authorization  # Bearer JWT consent token
+  signature:
+    method: Draft Cavage HTTP Signatures v10
+    algorithm: rsa-sha256
+    key_min_bits: 2048
+    key_id: TPP Client-Id
+    signed_headers_get_delete: [(request-target), host, date]
+    signed_headers_write: [(request-target), host, date, content-type, digest]
+  ref: authentication/holvi-authentication.yml
+digest:
+  standard: RFC 3230
+  algorithm: SHA-256
+  applies_to: [POST, PUT, PATCH]
+pagination:
+  style: page-number  # Django REST Framework style
+  request_params: [page]
+  response_fields:
+    count: Total number of results
+    next: Absolute URL of the next page (null on last page)
+    previous: Absolute URL of the previous page (null on first page)
+    results: Array of items
+  applies_to:
+    - openapi/holvi-psd2-openapi.yml#listPayments
+  windowing: Only payments from the last 365 days are returned.
+idempotency:
+  supported: false
+  notes: No idempotency-key header/parameter is documented. Payment state is polled after SCA; duplicate submission is not protected by an idempotency contract.
+filtering:
+  listPayments: [state, direction, from_date, to_date]
+dates:
+  header_format: RFC 7231 full date
+  body_dates: ISO 8601 / YYYY-MM-DD
+versioning:
+  scheme: uri-path
+  current: v2
+  ref: lifecycle/holvi-lifecycle.yml
+error_envelope:
+  shape: '{"error": "...", "details": "..."}'
+  ref: errors/holvi-problem-types.yml
+identifiers:
+  format: UUID (v4) for accounts, payments, payment initializations, applications, VOP requests
+amounts:
+  format: decimal string (e.g. "100.00")
+  currency: ISO 4217; defaults to the payment account currency
+rate_limiting:
+  documented: false

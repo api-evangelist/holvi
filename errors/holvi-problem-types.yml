@@ -1,0 +1,58 @@
+generated: '2026-07-19'
+method: searched
+source: https://holvi.github.io/psd2-api/
+format: custom-json
+# Holvi PSD2 does NOT use RFC 9457 problem+json. Errors are a flat JSON envelope
+# {"error": "...", "details": "..."} on 4xx from the payment-initiation / VOP endpoints;
+# other endpoints return the bare HTTP status with a description. Captured verbatim from
+# the published API reference (authentication error-codes table, service status codes,
+# and the VOP error-handling section).
+envelope:
+  content_type: application/json
+  fields:
+    error: Short human-readable error label
+    details: 'Additional detail (e.g. "VOP service unavailable: Connection timeout")'
+problems:
+  - status: 400
+    title: Bad Request
+    description: The request is invalid (malformed body, invalid certificate on renewal, or a VOP verification failure).
+    source_operations:
+      - openapi/holvi-psd2-openapi.yml#initiatePayment
+      - openapi/holvi-psd2-openapi.yml#renewCertificate
+  - status: 401
+    title: Unauthorized
+    description: The request headers are invalid, the signature/certificate is not valid, or authentication was unsuccessful.
+    source_operations:
+      - openapi/holvi-psd2-openapi.yml#listPaymentAccounts
+      - openapi/holvi-psd2-openapi.yml#exchangeConsentToken
+  - status: 403
+    title: Forbidden
+    description: The user lacks permission for the action (e.g. payment-initiation permission not granted, or the user is not verified).
+    source_operations:
+      - openapi/holvi-psd2-openapi.yml#initiatePayment
+      - openapi/holvi-psd2-openapi.yml#confirmVop
+  - status: 404
+    title: Not Found
+    description: The requested resource could not be found (e.g. token_uuid not found, user has not given authorization; or a VOP payment initialization not in a confirmable state).
+    source_operations:
+      - openapi/holvi-psd2-openapi.yml#exchangeConsentToken
+      - openapi/holvi-psd2-openapi.yml#confirmVop
+  - status: 405
+    title: Method Not Allowed
+    description: The endpoint did not support the request method.
+  - status: 500
+    title: Internal Server Error
+    description: A problem occurred on Holvi's servers. Retry later.
+  - status: 503
+    title: Service Unavailable
+    description: A downstream service (e.g. the VOP verification service) is unavailable.
+    source_operations:
+      - openapi/holvi-psd2-openapi.yml#initiatePayment
+      - openapi/holvi-psd2-openapi.yml#confirmVop
+vop_errors:
+  - condition: VOP service unavailable or error
+    status: 400
+    example: '{"error": "VOP verification failed", "details": "VOP service unavailable: Connection timeout"}'
+  - condition: Missing payee name or IBAN
+    status: 400
+    example: '{"error": "VOP verification failed", "details": "Missing payee name or IBAN for VOP"}'
