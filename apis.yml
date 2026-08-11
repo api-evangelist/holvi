@@ -114,7 +114,7 @@ common:
 - type: DomainSecurity
   url: security/holvi-domain-security.yml
 - type: OpenAPI
-  url: openapi/holvi-psd2-openapi.yml
+  url: openapi/_original/holvi-psd2-openapi.yml
 - type: Conventions
   url: conventions/holvi-conventions.yml
 - type: ErrorCatalog
