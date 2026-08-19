@@ -1,0 +1,72 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Holvi PSD2 Account Information Payment Initiation API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Holvi-Client-Id",
+      "value": "{{X-Holvi-Client-Id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Payment Initiation",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Initiate a payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.psd2.holvi.com/api/v2/payment-initiation/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-Holvi-Client-Id",
+              "value": "{{X-Holvi-Client-Id}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Initiates a payment from a Holvi customer payment account. Supports SEPA, SEPA Instant and SWIFT (international) payments. After initiation the customer must complete Strong Customer Authentication (SCA) on their phone; poll the payment state until it becomes `verified`. Set `execute_verification_of_payee: true` to run Verification of Payee (VOP) - a perfect match returns 201, a fuzzy/no match returns 202 requiring confirmation."
+        },
+        {
+          "info": {
+            "name": "Confirm a payment after VOP fuzzy/no match",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.psd2.holvi.com/api/v2/payment-initiation/:payment_initialization_id/confirm-vop",
+            "params": [
+              {
+                "name": "payment_initialization_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID returned from the initial VOP payment request."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-Holvi-Client-Id",
+              "value": "{{X-Holvi-Client-Id}}",
+              "placement": "header"
+            }
+          },
+          "docs": "When VOP returns a fuzzy match or no match (202), call this endpoint to confirm and proceed with the payment after the user has reviewed the name mismatch."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

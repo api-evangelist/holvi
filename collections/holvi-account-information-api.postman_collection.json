@@ -1,0 +1,801 @@
+{
+  "item": [
+    {
+      "id": "5d723f60-89cf-492f-9f2a-6f0d5356a62b",
+      "name": "Account Information",
+      "description": {
+        "content": "AISP endpoints - read Holvi customer payment accounts and payments.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "408321b0-a1ef-4006-a29f-8e13ee9b0caf",
+          "name": "List payment accounts",
+          "request": {
+            "name": "List payment accounts",
+            "description": {
+              "content": "Returns the list of payment accounts for the PSU the JWT token was issued for. A Holvi customer can have multiple payment accounts; each holds a single currency.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "payment-accounts",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-Holvi-Client-Id"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "1398d650-ccdc-4a69-9f32-c39e0f570f56",
+              "name": "No error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "payment-accounts",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Holvi-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"uuid\": \"fd8c8b0f-2da3-31e8-4d7c-97d5e03ecd27\",\n    \"currency\": \"string\",\n    \"type\": \"psd\",\n    \"name\": \"string\",\n    \"default\": true,\n    \"iban\": \"string\",\n    \"bic\": \"string\",\n    \"balance\": \"string\",\n    \"available_balance\": \"string\",\n    \"state\": \"active\"\n  },\n  {\n    \"uuid\": \"b74de156-d78c-9243-dff8-9e18207ff5b6\",\n    \"currency\": \"string\",\n    \"type\": \"psd\",\n    \"name\": \"string\",\n    \"default\": false,\n    \"iban\": \"string\",\n    \"bic\": \"string\",\n    \"balance\": \"string\",\n    \"available_balance\": \"string\",\n    \"state\": \"active\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f9947eb5-5c38-4f49-bc5e-8a048f1837e3",
+              "name": "Unsuccessful authentication",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "payment-accounts",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Holvi-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5ba89ae9-a5e5-4bb0-b1da-9a11715fc5dd",
+          "name": "Get a payment account",
+          "request": {
+            "name": "Get a payment account",
+            "description": {
+              "content": "Returns a single payment account by its UUID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "payment-accounts",
+                ":uuid",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "uuid",
+                  "description": "(Required) UUID of the payment account."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-Holvi-Client-Id"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a4251bb9-4f56-448d-a8ab-c0ed7973c751",
+              "name": "No error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "payment-accounts",
+                    ":uuid",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) UUID of the payment account."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Holvi-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"uuid\": \"18b46b00-a918-3b38-69a0-e21104bf62b5\",\n  \"currency\": \"string\",\n  \"type\": \"psd\",\n  \"name\": \"string\",\n  \"default\": false,\n  \"iban\": \"string\",\n  \"bic\": \"string\",\n  \"balance\": \"string\",\n  \"available_balance\": \"string\",\n  \"state\": \"active\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d4519322-6da8-4d54-b1ab-35d178122e86",
+              "name": "Unsuccessful authentication",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "payment-accounts",
+                    ":uuid",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) UUID of the payment account."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Holvi-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b44eeb3b-dcd7-4527-b9ef-874aa83abf86",
+          "name": "List payments for a payment account",
+          "request": {
+            "name": "List payments for a payment account",
+            "description": {
+              "content": "Returns a paginated list of payments for a payment account. Only payments from the last 365 days are returned.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "payment-accounts",
+                ":uuid",
+                "payments",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "state",
+                  "value": "<string>",
+                  "description": "One of unverified, paid, notenoughbalance, cancelled, scheduled."
+                },
+                {
+                  "disabled": false,
+                  "key": "direction",
+                  "value": "<string>",
+                  "description": "One of in, out."
+                },
+                {
+                  "disabled": false,
+                  "key": "from_date",
+                  "value": "<date>",
+                  "description": "Filter by booking date (YYYY-MM-DD). Cannot be more than 365 days in the past."
+                },
+                {
+                  "disabled": false,
+                  "key": "to_date",
+                  "value": "<date>",
+                  "description": "Filter by booking date (YYYY-MM-DD)."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>",
+                  "description": "Page number (page-number pagination)."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "uuid",
+                  "description": "(Required) UUID of the payment account."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-Holvi-Client-Id"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "feee6a1e-4c3d-4c2c-904f-70e9c37b7ac7",
+              "name": "No error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "payment-accounts",
+                    ":uuid",
+                    "payments",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "state",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "from_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "to_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) UUID of the payment account."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Holvi-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 5860,\n  \"next\": \"string\",\n  \"previous\": \"string\",\n  \"results\": [\n    {\n      \"uuid\": \"d1938135-9f20-e470-9040-f41ea5a06888\",\n      \"counterparty\": {\n        \"name\": \"string\",\n        \"bic\": \"string\",\n        \"account_identifier\": \"string\",\n        \"account_identifier_type\": \"iban\",\n        \"street\": \"string\",\n        \"building\": \"string\",\n        \"postcode\": \"string\",\n        \"region\": \"string\",\n        \"city\": \"string\",\n        \"country\": \"string\",\n        \"additional_info\": \"string\"\n      },\n      \"amount\": \"string\",\n      \"currency\": \"string\",\n      \"method\": \"international\",\n      \"booking_date\": \"1982-12-04\",\n      \"due_date\": \"2022-04-08\",\n      \"execution_at\": \"1985-12-24T14:34:37.531Z\",\n      \"state\": \"verified\",\n      \"direction\": \"in\",\n      \"is_credit\": false,\n      \"structured_reference\": \"string\",\n      \"unstructured_reference\": \"string\",\n      \"end_to_end_id\": \"string\"\n    },\n    {\n      \"uuid\": \"6c2a9e5f-ad91-7ff1-a920-a25ec542dec5\",\n      \"counterparty\": {\n        \"name\": \"string\",\n        \"bic\": \"string\",\n        \"account_identifier\": \"string\",\n        \"account_identifier_type\": \"national_account_number\",\n        \"street\": \"string\",\n        \"building\": \"string\",\n        \"postcode\": \"string\",\n        \"region\": \"string\",\n        \"city\": \"string\",\n        \"country\": \"string\",\n        \"additional_info\": \"string\"\n      },\n      \"amount\": \"string\",\n      \"currency\": \"string\",\n      \"method\": \"international\",\n      \"booking_date\": \"1977-11-15\",\n      \"due_date\": \"2012-02-20\",\n      \"execution_at\": \"1951-04-03T00:28:40.257Z\",\n      \"state\": \"scheduled\",\n      \"direction\": \"in\",\n      \"is_credit\": false,\n      \"structured_reference\": \"string\",\n      \"unstructured_reference\": \"string\",\n      \"end_to_end_id\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "32e300e5-413e-47d8-9ed9-95635847c848",
+              "name": "Unsuccessful authentication",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "payment-accounts",
+                    ":uuid",
+                    "payments",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "state",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "from_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "to_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uuid",
+                      "description": "(Required) UUID of the payment account."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Holvi-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "84a9381f-d53f-4fe3-9cb5-58e742fab454",
+          "name": "Get a payment",
+          "request": {
+            "name": "Get a payment",
+            "description": {
+              "content": "Returns a single payment by UUID within a payment account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "payment-accounts",
+                ":payment_account_uuid",
+                "payments",
+                ":payment_uuid",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "payment_account_uuid",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "payment_uuid",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-Holvi-Client-Id"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "dafd2c7a-f026-4e49-bdad-980c50a33cf1",
+              "name": "No error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "payment-accounts",
+                    ":payment_account_uuid",
+                    "payments",
+                    ":payment_uuid",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "payment_account_uuid",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "payment_uuid",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Holvi-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"uuid\": \"823931d9-ef95-ca9b-8ac2-974848938ea8\",\n  \"counterparty\": {\n    \"name\": \"string\",\n    \"bic\": \"string\",\n    \"account_identifier\": \"string\",\n    \"account_identifier_type\": \"national_account_number\",\n    \"street\": \"string\",\n    \"building\": \"string\",\n    \"postcode\": \"string\",\n    \"region\": \"string\",\n    \"city\": \"string\",\n    \"country\": \"string\",\n    \"additional_info\": \"string\"\n  },\n  \"amount\": \"string\",\n  \"currency\": \"string\",\n  \"method\": \"sepa\",\n  \"booking_date\": \"2001-06-11\",\n  \"due_date\": \"2008-02-03\",\n  \"execution_at\": \"2017-08-20T10:24:54.812Z\",\n  \"state\": \"cancelled\",\n  \"direction\": \"in\",\n  \"is_credit\": true,\n  \"structured_reference\": \"string\",\n  \"unstructured_reference\": \"string\",\n  \"end_to_end_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "44167ff2-b6f6-48c7-8220-ab3596d864b9",
+              "name": "Unsuccessful authentication",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "payment-accounts",
+                    ":payment_account_uuid",
+                    "payments",
+                    ":payment_uuid",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "payment_account_uuid",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "payment_uuid",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Holvi-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.psd2.holvi.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Holvi-Client-Id"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "94a49b4d-aab5-460a-a034-2a83bf16d8f9",
+    "name": "Holvi PSD2 Account Information API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "PSD2 (Payment Services Directive 2) API for licensed Third Party Providers (TPPs) to access Holvi customer payment accounts (AISP) and initiate SEPA / SEPA Instant / SWIFT payments (PISP) with Strong Customer Authentication, plus optional Verification of Payee (VOP). TPPs authenticate with an eIDAS QSEAL client certificate, a Holvi Client-Id/Client-Secret pair, and per-request HTTP message signatures (Draft Cavage HTTP Signatures v10, RSA-SHA256). End users (PSUs) grant consent through a redirect login flow that yields a JWT bearer access token.\n\nContact Support:\n Name: Holvi Developer Support\n Email: developer@holvi.com",
+      "type": "text/plain"
+    }
+  }
+}

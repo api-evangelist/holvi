@@ -1,0 +1,750 @@
+{
+  "item": [
+    {
+      "id": "973bacd3-fcec-416e-bed5-2bd9c9998157",
+      "name": "Payment Initiation",
+      "description": {
+        "content": "PISP endpoints - initiate and confirm SEPA / SEPA Instant / SWIFT payments.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "899d494d-c41c-4bfe-856f-ea11be022d18",
+          "name": "Initiate a payment",
+          "request": {
+            "name": "Initiate a payment",
+            "description": {
+              "content": "Initiates a payment from a Holvi customer payment account. Supports SEPA, SEPA Instant and SWIFT (international) payments. After initiation the customer must complete Strong Customer Authentication (SCA) on their phone; poll the payment state until it becomes `verified`. Set `execute_verification_of_payee: true` to run Verification of Payee (VOP) - a perfect match returns 201, a fuzzy/no match returns 202 requiring confirmation.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "payment-initiation",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-Holvi-Client-Id"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"payment_account\": \"<uuid>\",\n  \"amount\": \"<string>\",\n  \"counterparty\": {\n    \"name\": \"<string>\",\n    \"bic\": \"<string>\",\n    \"account_identifier\": \"<string>\",\n    \"account_identifier_type\": \"<string>\",\n    \"street\": \"<string>\",\n    \"building\": \"<string>\",\n    \"postcode\": \"<string>\",\n    \"region\": \"<string>\",\n    \"city\": \"<string>\",\n    \"country\": \"<string>\",\n    \"additional_info\": \"<string>\"\n  },\n  \"currency\": \"<string>\",\n  \"due_date\": \"<date>\",\n  \"unstructured_reference\": \"<string>\",\n  \"structured_reference\": \"<string>\",\n  \"end_to_end_id\": \"<string>\",\n  \"method\": \"sepa\",\n  \"instant\": false,\n  \"execute_verification_of_payee\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6cca94dd-6c2e-445c-8daf-17a2de8d3e77",
+              "name": "Payment created successfully (perfect match or VOP disabled)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "payment-initiation",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Holvi-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"payment_account\": \"<uuid>\",\n  \"amount\": \"<string>\",\n  \"counterparty\": {\n    \"name\": \"<string>\",\n    \"bic\": \"<string>\",\n    \"account_identifier\": \"<string>\",\n    \"account_identifier_type\": \"<string>\",\n    \"street\": \"<string>\",\n    \"building\": \"<string>\",\n    \"postcode\": \"<string>\",\n    \"region\": \"<string>\",\n    \"city\": \"<string>\",\n    \"country\": \"<string>\",\n    \"additional_info\": \"<string>\"\n  },\n  \"currency\": \"<string>\",\n  \"due_date\": \"<date>\",\n  \"unstructured_reference\": \"<string>\",\n  \"structured_reference\": \"<string>\",\n  \"end_to_end_id\": \"<string>\",\n  \"method\": \"sepa\",\n  \"instant\": false,\n  \"execute_verification_of_payee\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"uuid\": \"60d4a53e-f3e0-2b7f-d3a7-6cda10e499dd\",\n  \"counterparty\": {\n    \"name\": \"<string>\",\n    \"bic\": \"<string>\",\n    \"account_identifier\": \"<string>\",\n    \"account_identifier_type\": \"<string>\",\n    \"street\": \"<string>\",\n    \"building\": \"<string>\",\n    \"postcode\": \"<string>\",\n    \"region\": \"<string>\",\n    \"city\": \"<string>\",\n    \"country\": \"<string>\",\n    \"additional_info\": \"<string>\"\n  },\n  \"amount\": \"string\",\n  \"currency\": \"string\",\n  \"method\": \"sepa\",\n  \"booking_date\": \"1961-12-03\",\n  \"due_date\": \"1962-07-06\",\n  \"execution_at\": \"1959-02-01T07:52:09.268Z\",\n  \"state\": \"verified\",\n  \"direction\": \"in\",\n  \"is_credit\": false,\n  \"structured_reference\": \"string\",\n  \"unstructured_reference\": \"string\",\n  \"end_to_end_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a5802c45-191a-401f-8c14-725ba8ac2012",
+              "name": "VOP verification requires user confirmation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "payment-initiation",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Holvi-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"payment_account\": \"<uuid>\",\n  \"amount\": \"<string>\",\n  \"counterparty\": {\n    \"name\": \"<string>\",\n    \"bic\": \"<string>\",\n    \"account_identifier\": \"<string>\",\n    \"account_identifier_type\": \"<string>\",\n    \"street\": \"<string>\",\n    \"building\": \"<string>\",\n    \"postcode\": \"<string>\",\n    \"region\": \"<string>\",\n    \"city\": \"<string>\",\n    \"country\": \"<string>\",\n    \"additional_info\": \"<string>\"\n  },\n  \"currency\": \"<string>\",\n  \"due_date\": \"<date>\",\n  \"unstructured_reference\": \"<string>\",\n  \"structured_reference\": \"<string>\",\n  \"end_to_end_id\": \"<string>\",\n  \"method\": \"sepa\",\n  \"instant\": false,\n  \"execute_verification_of_payee\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"payment_initialization_id\": \"047c14a2-0967-bafe-e878-ef333d08d990\",\n  \"vop_result\": {\n    \"request_uuid\": \"a2ea572e-cbe7-a658-009a-96cab085377b\",\n    \"match_result\": \"match\",\n    \"match_name\": \"string\",\n    \"confidence_score\": 8352.595715840256\n  },\n  \"requires_confirmation\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9fa2dfec-b15d-4437-840a-d255396ac7a8",
+              "name": "VOP verification failed or invalid request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "payment-initiation",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Holvi-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"payment_account\": \"<uuid>\",\n  \"amount\": \"<string>\",\n  \"counterparty\": {\n    \"name\": \"<string>\",\n    \"bic\": \"<string>\",\n    \"account_identifier\": \"<string>\",\n    \"account_identifier_type\": \"<string>\",\n    \"street\": \"<string>\",\n    \"building\": \"<string>\",\n    \"postcode\": \"<string>\",\n    \"region\": \"<string>\",\n    \"city\": \"<string>\",\n    \"country\": \"<string>\",\n    \"additional_info\": \"<string>\"\n  },\n  \"currency\": \"<string>\",\n  \"due_date\": \"<date>\",\n  \"unstructured_reference\": \"<string>\",\n  \"structured_reference\": \"<string>\",\n  \"end_to_end_id\": \"<string>\",\n  \"method\": \"sepa\",\n  \"instant\": false,\n  \"execute_verification_of_payee\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\",\n  \"details\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "acbcd981-177d-48bc-bbd8-f6d2d2f21e48",
+              "name": "Unsuccessful authentication",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "payment-initiation",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Holvi-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"payment_account\": \"<uuid>\",\n  \"amount\": \"<string>\",\n  \"counterparty\": {\n    \"name\": \"<string>\",\n    \"bic\": \"<string>\",\n    \"account_identifier\": \"<string>\",\n    \"account_identifier_type\": \"<string>\",\n    \"street\": \"<string>\",\n    \"building\": \"<string>\",\n    \"postcode\": \"<string>\",\n    \"region\": \"<string>\",\n    \"city\": \"<string>\",\n    \"country\": \"<string>\",\n    \"additional_info\": \"<string>\"\n  },\n  \"currency\": \"<string>\",\n  \"due_date\": \"<date>\",\n  \"unstructured_reference\": \"<string>\",\n  \"structured_reference\": \"<string>\",\n  \"end_to_end_id\": \"<string>\",\n  \"method\": \"sepa\",\n  \"instant\": false,\n  \"execute_verification_of_payee\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6993947c-625f-4ec6-bf71-c53852fd029c",
+              "name": "Forbidden. The user lacks payment-initiation permission or is not verified.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "payment-initiation",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Holvi-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"payment_account\": \"<uuid>\",\n  \"amount\": \"<string>\",\n  \"counterparty\": {\n    \"name\": \"<string>\",\n    \"bic\": \"<string>\",\n    \"account_identifier\": \"<string>\",\n    \"account_identifier_type\": \"<string>\",\n    \"street\": \"<string>\",\n    \"building\": \"<string>\",\n    \"postcode\": \"<string>\",\n    \"region\": \"<string>\",\n    \"city\": \"<string>\",\n    \"country\": \"<string>\",\n    \"additional_info\": \"<string>\"\n  },\n  \"currency\": \"<string>\",\n  \"due_date\": \"<date>\",\n  \"unstructured_reference\": \"<string>\",\n  \"structured_reference\": \"<string>\",\n  \"end_to_end_id\": \"<string>\",\n  \"method\": \"sepa\",\n  \"instant\": false,\n  \"execute_verification_of_payee\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a5b4e03a-d4d8-45ba-974c-b12359ed89c1",
+              "name": "Service unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "payment-initiation",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Holvi-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"payment_account\": \"<uuid>\",\n  \"amount\": \"<string>\",\n  \"counterparty\": {\n    \"name\": \"<string>\",\n    \"bic\": \"<string>\",\n    \"account_identifier\": \"<string>\",\n    \"account_identifier_type\": \"<string>\",\n    \"street\": \"<string>\",\n    \"building\": \"<string>\",\n    \"postcode\": \"<string>\",\n    \"region\": \"<string>\",\n    \"city\": \"<string>\",\n    \"country\": \"<string>\",\n    \"additional_info\": \"<string>\"\n  },\n  \"currency\": \"<string>\",\n  \"due_date\": \"<date>\",\n  \"unstructured_reference\": \"<string>\",\n  \"structured_reference\": \"<string>\",\n  \"end_to_end_id\": \"<string>\",\n  \"method\": \"sepa\",\n  \"instant\": false,\n  \"execute_verification_of_payee\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3d74db0a-0e81-487b-9e87-0e7d477d41fd",
+          "name": "Confirm a payment after VOP fuzzy/no match",
+          "request": {
+            "name": "Confirm a payment after VOP fuzzy/no match",
+            "description": {
+              "content": "When VOP returns a fuzzy match or no match (202), call this endpoint to confirm and proceed with the payment after the user has reviewed the name mismatch.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "payment-initiation",
+                ":payment_initialization_id",
+                "confirm-vop"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "payment_initialization_id",
+                  "description": "(Required) The ID returned from the initial VOP payment request."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-Holvi-Client-Id"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "1a0afa86-936c-4339-93b5-e7cddbc61f8d",
+              "name": "Payment confirmed and created successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "payment-initiation",
+                    ":payment_initialization_id",
+                    "confirm-vop"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "payment_initialization_id",
+                      "description": "(Required) The ID returned from the initial VOP payment request."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Holvi-Client-Id",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"uuid\": \"60d4a53e-f3e0-2b7f-d3a7-6cda10e499dd\",\n  \"counterparty\": {\n    \"name\": \"<string>\",\n    \"bic\": \"<string>\",\n    \"account_identifier\": \"<string>\",\n    \"account_identifier_type\": \"<string>\",\n    \"street\": \"<string>\",\n    \"building\": \"<string>\",\n    \"postcode\": \"<string>\",\n    \"region\": \"<string>\",\n    \"city\": \"<string>\",\n    \"country\": \"<string>\",\n    \"additional_info\": \"<string>\"\n  },\n  \"amount\": \"string\",\n  \"currency\": \"string\",\n  \"method\": \"sepa\",\n  \"booking_date\": \"1961-12-03\",\n  \"due_date\": \"1962-07-06\",\n  \"execution_at\": \"1959-02-01T07:52:09.268Z\",\n  \"state\": \"verified\",\n  \"direction\": \"in\",\n  \"is_credit\": false,\n  \"structured_reference\": \"string\",\n  \"unstructured_reference\": \"string\",\n  \"end_to_end_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0d77d0f4-80c5-48ed-8adc-4373900cdc34",
+              "name": "Unsuccessful authentication",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "payment-initiation",
+                    ":payment_initialization_id",
+                    "confirm-vop"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "payment_initialization_id",
+                      "description": "(Required) The ID returned from the initial VOP payment request."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Holvi-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3d14bdcf-2128-4d0a-984a-e670d39bd046",
+              "name": "Insufficient permissions",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "payment-initiation",
+                    ":payment_initialization_id",
+                    "confirm-vop"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "payment_initialization_id",
+                      "description": "(Required) The ID returned from the initial VOP payment request."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Holvi-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "55ba99e8-3f27-4030-bd4a-c7317ad04ddb",
+              "name": "Payment initialization not found or not in confirmable state",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "payment-initiation",
+                    ":payment_initialization_id",
+                    "confirm-vop"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "payment_initialization_id",
+                      "description": "(Required) The ID returned from the initial VOP payment request."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Holvi-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "66190889-1b0e-464d-b994-5d1666512e9c",
+              "name": "Service unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "payment-initiation",
+                    ":payment_initialization_id",
+                    "confirm-vop"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "payment_initialization_id",
+                      "description": "(Required) The ID returned from the initial VOP payment request."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Holvi-Client-Id",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.psd2.holvi.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Holvi-Client-Id"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "f27abf27-ad61-44b8-8603-64fe49088bb6",
+    "name": "Holvi PSD2 Account Information Payment Initiation API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "PSD2 (Payment Services Directive 2) API for licensed Third Party Providers (TPPs) to access Holvi customer payment accounts (AISP) and initiate SEPA / SEPA Instant / SWIFT payments (PISP) with Strong Customer Authentication, plus optional Verification of Payee (VOP). TPPs authenticate with an eIDAS QSEAL client certificate, a Holvi Client-Id/Client-Secret pair, and per-request HTTP message signatures (Draft Cavage HTTP Signatures v10, RSA-SHA256). End users (PSUs) grant consent through a redirect login flow that yields a JWT bearer access token.\n\nContact Support:\n Name: Holvi Developer Support\n Email: developer@holvi.com",
+      "type": "text/plain"
+    }
+  }
+}

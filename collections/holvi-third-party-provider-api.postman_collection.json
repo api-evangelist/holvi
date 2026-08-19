@@ -1,0 +1,311 @@
+{
+  "item": [
+    {
+      "id": "129af6dd-c8ce-4ad3-bef2-e4befef52772",
+      "name": "Third Party Provider",
+      "description": {
+        "content": "TPP certificate lifecycle.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5f32809e-71dd-4a25-9c2b-8288ce0892d8",
+          "name": "Renew a TPP client certificate",
+          "request": {
+            "name": "Renew a TPP client certificate",
+            "description": {
+              "content": "Renews the eIDAS client certificate for a given application_id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "renew-certificate",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "new_certificate",
+                  "type": "file",
+                  "description": "(Required) New client certificate (.pem) file."
+                },
+                {
+                  "key": "application_id",
+                  "value": "<uuid>",
+                  "type": "text",
+                  "description": "(Required) "
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ccc67f9d-d8c4-4624-929d-a38639d39bbb",
+              "name": "Certificate renewed correctly",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "renew-certificate",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) New client certificate (.pem) file.",
+                        "type": "text/plain"
+                      },
+                      "key": "new_certificate",
+                      "value": "<binary>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "application_id",
+                      "value": "<uuid>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"application_id\": \"174d0d44-8b2d-e991-cedd-2f2b50f062fe\",\n  \"new_certificate\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6a0c03c4-4f9a-40e9-995f-09cce3291f18",
+              "name": "Invalid certificate, unknown application ID, or certificate file too big",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "renew-certificate",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) New client certificate (.pem) file.",
+                        "type": "text/plain"
+                      },
+                      "key": "new_certificate",
+                      "value": "<binary>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "application_id",
+                      "value": "<uuid>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "70a986df-d4a5-44ef-aa27-a7db83b0980a",
+              "name": "Unsuccessful authentication",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "renew-certificate",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) New client certificate (.pem) file.",
+                        "type": "text/plain"
+                      },
+                      "key": "new_certificate",
+                      "value": "<binary>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "application_id",
+                      "value": "<uuid>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.psd2.holvi.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Holvi-Client-Id"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "80397944-8bf0-411c-ad1b-d9a976ef96de",
+    "name": "Holvi PSD2 Account Information Third Party Provider API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "PSD2 (Payment Services Directive 2) API for licensed Third Party Providers (TPPs) to access Holvi customer payment accounts (AISP) and initiate SEPA / SEPA Instant / SWIFT payments (PISP) with Strong Customer Authentication, plus optional Verification of Payee (VOP). TPPs authenticate with an eIDAS QSEAL client certificate, a Holvi Client-Id/Client-Secret pair, and per-request HTTP message signatures (Draft Cavage HTTP Signatures v10, RSA-SHA256). End users (PSUs) grant consent through a redirect login flow that yields a JWT bearer access token.\n\nContact Support:\n Name: Holvi Developer Support\n Email: developer@holvi.com",
+      "type": "text/plain"
+    }
+  }
+}

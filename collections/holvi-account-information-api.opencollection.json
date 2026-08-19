@@ -1,0 +1,152 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Holvi PSD2 Account Information API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Holvi-Client-Id",
+      "value": "{{X-Holvi-Client-Id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Account Information",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List payment accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.psd2.holvi.com/api/v2/payment-accounts/",
+            "auth": {
+              "type": "apikey",
+              "key": "X-Holvi-Client-Id",
+              "value": "{{X-Holvi-Client-Id}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns the list of payment accounts for the PSU the JWT token was issued for. A Holvi customer can have multiple payment accounts; each holds a single currency."
+        },
+        {
+          "info": {
+            "name": "Get a payment account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.psd2.holvi.com/api/v2/payment-accounts/:uuid/",
+            "params": [
+              {
+                "name": "uuid",
+                "value": "",
+                "type": "path",
+                "description": "UUID of the payment account."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-Holvi-Client-Id",
+              "value": "{{X-Holvi-Client-Id}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns a single payment account by its UUID."
+        },
+        {
+          "info": {
+            "name": "List payments for a payment account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.psd2.holvi.com/api/v2/payment-accounts/:uuid/payments/",
+            "params": [
+              {
+                "name": "uuid",
+                "value": "",
+                "type": "path",
+                "description": "UUID of the payment account."
+              },
+              {
+                "name": "state",
+                "value": "",
+                "type": "query",
+                "description": "One of unverified, paid, notenoughbalance, cancelled, scheduled."
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "One of in, out."
+              },
+              {
+                "name": "from_date",
+                "value": "",
+                "type": "query",
+                "description": "Filter by booking date (YYYY-MM-DD). Cannot be more than 365 days in the past."
+              },
+              {
+                "name": "to_date",
+                "value": "",
+                "type": "query",
+                "description": "Filter by booking date (YYYY-MM-DD)."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (page-number pagination)."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-Holvi-Client-Id",
+              "value": "{{X-Holvi-Client-Id}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns a paginated list of payments for a payment account. Only payments from the last 365 days are returned."
+        },
+        {
+          "info": {
+            "name": "Get a payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.psd2.holvi.com/api/v2/payment-accounts/:payment_account_uuid/payments/:payment_uuid/",
+            "params": [
+              {
+                "name": "payment_account_uuid",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "payment_uuid",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-Holvi-Client-Id",
+              "value": "{{X-Holvi-Client-Id}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Returns a single payment by UUID within a payment account."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

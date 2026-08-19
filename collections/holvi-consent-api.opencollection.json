@@ -1,0 +1,56 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Holvi PSD2 Account Information Consent API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Holvi-Client-Id",
+      "value": "{{X-Holvi-Client-Id}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Consent",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Initiate a user consent access token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.psd2.holvi.com/api/v2/consent/initiate/usernamepassword/"
+          },
+          "docs": "Initiates a Payment Service User (PSU) consent and returns an access token used in the Authorization header of subsequent Account Information and Payment Initiation calls. Does not require the request Signature/Digest headers."
+        },
+        {
+          "info": {
+            "name": "Exchange an authorization code for a JWT token",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.psd2.holvi.com/api/v2/consent/token/:code/exchange/",
+            "params": [
+              {
+                "name": "code",
+                "value": "",
+                "type": "path",
+                "description": "Authorization code from the login redirect (token_uuid)."
+              }
+            ]
+          },
+          "docs": "After the PSU logs in at https://psd2.holvi.com/login/ and is redirected back with a `code`, exchange that code for a JWT bearer token."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
