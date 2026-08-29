@@ -119,6 +119,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: CapabilityMap
+  url: capabilities/holvi-capability-edges.yml
+  name: Holvi Business Capability Map
 - type: AgenticAccess
   url: agentic-access/holvi-agentic-access.yml
 - type: Authentication
