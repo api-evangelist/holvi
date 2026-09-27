@@ -177,6 +177,39 @@ paths:
           description: Unsuccessful authentication
 components:
   schemas:
+    Counterparty:
+      type: object
+      properties:
+        name:
+          type: string
+        bic:
+          type: string
+        account_identifier:
+          type: string
+          description: IBAN or national account number
+        account_identifier_type:
+          type: string
+          enum:
+          - iban
+          - national_account_number
+        street:
+          type: string
+        building:
+          type: string
+          maxLength: 16
+        postcode:
+          type: string
+          maxLength: 16
+        region:
+          type: string
+          maxLength: 35
+        city:
+          type: string
+        country:
+          type: string
+          description: ISO 3166-1 alpha-2 country code
+        additional_info:
+          type: string
     PaginatedPayments:
       type: object
       description: Django-REST-Framework style page-number pagination envelope.
@@ -286,39 +319,6 @@ components:
         state:
           type: string
           example: active
-    Counterparty:
-      type: object
-      properties:
-        name:
-          type: string
-        bic:
-          type: string
-        account_identifier:
-          type: string
-          description: IBAN or national account number
-        account_identifier_type:
-          type: string
-          enum:
-          - iban
-          - national_account_number
-        street:
-          type: string
-        building:
-          type: string
-          maxLength: 16
-        postcode:
-          type: string
-          maxLength: 16
-        region:
-          type: string
-          maxLength: 35
-        city:
-          type: string
-        country:
-          type: string
-          description: ISO 3166-1 alpha-2 country code
-        additional_info:
-          type: string
   securitySchemes:
     HolviClientId:
       type: apiKey

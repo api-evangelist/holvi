@@ -103,16 +103,6 @@ paths:
           description: Service unavailable
 components:
   schemas:
-    VopPendingResponse:
-      type: object
-      properties:
-        payment_initialization_id:
-          type: string
-          format: uuid
-        vop_result:
-          $ref: '#/components/schemas/VopResult'
-        requires_confirmation:
-          type: boolean
     Counterparty:
       type: object
       properties:
@@ -146,6 +136,65 @@ components:
           description: ISO 3166-1 alpha-2 country code
         additional_info:
           type: string
+    Payment:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        counterparty:
+          $ref: '#/components/schemas/Counterparty'
+        amount:
+          type: string
+        currency:
+          type: string
+        method:
+          type: string
+          enum:
+          - sepa
+          - international
+        booking_date:
+          type:
+          - string
+          - 'null'
+          format: date
+        due_date:
+          type:
+          - string
+          - 'null'
+          format: date
+        execution_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        state:
+          type: string
+          enum:
+          - unverified
+          - verified
+          - paid
+          - notenoughbalance
+          - cancelled
+          - scheduled
+        direction:
+          type: string
+          enum:
+          - in
+          - out
+        is_credit:
+          type:
+          - boolean
+          - 'null'
+        structured_reference:
+          type: string
+          maxLength: 35
+        unstructured_reference:
+          type: string
+          maxLength: 140
+        end_to_end_id:
+          type: string
+          maxLength: 36
     VopResult:
       type: object
       properties:
@@ -213,65 +262,16 @@ components:
           type: boolean
           default: false
           description: Enable Verification of Payee (VOP).
-    Payment:
+    VopPendingResponse:
       type: object
       properties:
-        uuid:
+        payment_initialization_id:
           type: string
           format: uuid
-        counterparty:
-          $ref: '#/components/schemas/Counterparty'
-        amount:
-          type: string
-        currency:
-          type: string
-        method:
-          type: string
-          enum:
-          - sepa
-          - international
-        booking_date:
-          type:
-          - string
-          - 'null'
-          format: date
-        due_date:
-          type:
-          - string
-          - 'null'
-          format: date
-        execution_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        state:
-          type: string
-          enum:
-          - unverified
-          - verified
-          - paid
-          - notenoughbalance
-          - cancelled
-          - scheduled
-        direction:
-          type: string
-          enum:
-          - in
-          - out
-        is_credit:
-          type:
-          - boolean
-          - 'null'
-        structured_reference:
-          type: string
-          maxLength: 35
-        unstructured_reference:
-          type: string
-          maxLength: 140
-        end_to_end_id:
-          type: string
-          maxLength: 36
+        vop_result:
+          $ref: '#/components/schemas/VopResult'
+        requires_confirmation:
+          type: boolean
   securitySchemes:
     HolviClientId:
       type: apiKey
