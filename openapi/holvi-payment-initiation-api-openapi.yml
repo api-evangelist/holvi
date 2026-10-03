@@ -103,6 +103,49 @@ paths:
           description: Service unavailable
 components:
   schemas:
+    PaymentInitiationRequest:
+      type: object
+      required:
+      - payment_account
+      - amount
+      - counterparty
+      properties:
+        payment_account:
+          type: string
+          format: uuid
+        amount:
+          type: string
+        currency:
+          type: string
+          description: ISO 4217; defaults to account currency
+        counterparty:
+          $ref: '#/components/schemas/Counterparty'
+        due_date:
+          type: string
+          format: date
+        unstructured_reference:
+          type: string
+          maxLength: 140
+        structured_reference:
+          type: string
+          maxLength: 35
+        end_to_end_id:
+          type: string
+          maxLength: 36
+        method:
+          type: string
+          enum:
+          - sepa
+          - international
+          default: sepa
+        instant:
+          type: boolean
+          default: false
+          description: Request a SEPA Instant payment
+        execute_verification_of_payee:
+          type: boolean
+          default: false
+          description: Enable Verification of Payee (VOP).
     Counterparty:
       type: object
       properties:
@@ -135,6 +178,24 @@ components:
           type: string
           description: ISO 3166-1 alpha-2 country code
         additional_info:
+          type: string
+    VopPendingResponse:
+      type: object
+      properties:
+        payment_initialization_id:
+          type: string
+          format: uuid
+        vop_result:
+          $ref: '#/components/schemas/VopResult'
+        requires_confirmation:
+          type: boolean
+    Error:
+      type: object
+      description: Holvi PSD2 error envelope.
+      properties:
+        error:
+          type: string
+        details:
           type: string
     Payment:
       type: object
@@ -211,67 +272,6 @@ components:
           type: string
         confidence_score:
           type: number
-    Error:
-      type: object
-      description: Holvi PSD2 error envelope.
-      properties:
-        error:
-          type: string
-        details:
-          type: string
-    PaymentInitiationRequest:
-      type: object
-      required:
-      - payment_account
-      - amount
-      - counterparty
-      properties:
-        payment_account:
-          type: string
-          format: uuid
-        amount:
-          type: string
-        currency:
-          type: string
-          description: ISO 4217; defaults to account currency
-        counterparty:
-          $ref: '#/components/schemas/Counterparty'
-        due_date:
-          type: string
-          format: date
-        unstructured_reference:
-          type: string
-          maxLength: 140
-        structured_reference:
-          type: string
-          maxLength: 35
-        end_to_end_id:
-          type: string
-          maxLength: 36
-        method:
-          type: string
-          enum:
-          - sepa
-          - international
-          default: sepa
-        instant:
-          type: boolean
-          default: false
-          description: Request a SEPA Instant payment
-        execute_verification_of_payee:
-          type: boolean
-          default: false
-          description: Enable Verification of Payee (VOP).
-    VopPendingResponse:
-      type: object
-      properties:
-        payment_initialization_id:
-          type: string
-          format: uuid
-        vop_result:
-          $ref: '#/components/schemas/VopResult'
-        requires_confirmation:
-          type: boolean
   securitySchemes:
     HolviClientId:
       type: apiKey

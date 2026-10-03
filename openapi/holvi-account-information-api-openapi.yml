@@ -177,6 +177,38 @@ paths:
           description: Unsuccessful authentication
 components:
   schemas:
+    PaymentAccount:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        currency:
+          type: string
+          description: Currency of the payment account
+        type:
+          type: string
+          enum:
+          - psd
+          - credit
+        name:
+          type: string
+          description: User-designated account name
+        default:
+          type: boolean
+        iban:
+          type: string
+        bic:
+          type: string
+        balance:
+          type: string
+          description: Balance without account reservations
+        available_balance:
+          type: string
+          description: Balance including account reservations
+        state:
+          type: string
+          example: active
     Counterparty:
       type: object
       properties:
@@ -287,38 +319,6 @@ components:
         end_to_end_id:
           type: string
           maxLength: 36
-    PaymentAccount:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-        currency:
-          type: string
-          description: Currency of the payment account
-        type:
-          type: string
-          enum:
-          - psd
-          - credit
-        name:
-          type: string
-          description: User-designated account name
-        default:
-          type: boolean
-        iban:
-          type: string
-        bic:
-          type: string
-        balance:
-          type: string
-          description: Balance without account reservations
-        available_balance:
-          type: string
-          description: Balance including account reservations
-        state:
-          type: string
-          example: active
   securitySchemes:
     HolviClientId:
       type: apiKey
