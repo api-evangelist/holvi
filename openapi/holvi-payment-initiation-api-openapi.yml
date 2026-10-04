@@ -146,6 +146,30 @@ components:
           type: boolean
           default: false
           description: Enable Verification of Payee (VOP).
+    Error:
+      type: object
+      description: Holvi PSD2 error envelope.
+      properties:
+        error:
+          type: string
+        details:
+          type: string
+    VopResult:
+      type: object
+      properties:
+        request_uuid:
+          type: string
+          format: uuid
+        match_result:
+          type: string
+          enum:
+          - match
+          - close-match
+          - no-match
+        match_name:
+          type: string
+        confidence_score:
+          type: number
     Counterparty:
       type: object
       properties:
@@ -178,24 +202,6 @@ components:
           type: string
           description: ISO 3166-1 alpha-2 country code
         additional_info:
-          type: string
-    VopPendingResponse:
-      type: object
-      properties:
-        payment_initialization_id:
-          type: string
-          format: uuid
-        vop_result:
-          $ref: '#/components/schemas/VopResult'
-        requires_confirmation:
-          type: boolean
-    Error:
-      type: object
-      description: Holvi PSD2 error envelope.
-      properties:
-        error:
-          type: string
-        details:
           type: string
     Payment:
       type: object
@@ -256,22 +262,16 @@ components:
         end_to_end_id:
           type: string
           maxLength: 36
-    VopResult:
+    VopPendingResponse:
       type: object
       properties:
-        request_uuid:
+        payment_initialization_id:
           type: string
           format: uuid
-        match_result:
-          type: string
-          enum:
-          - match
-          - close-match
-          - no-match
-        match_name:
-          type: string
-        confidence_score:
-          type: number
+        vop_result:
+          $ref: '#/components/schemas/VopResult'
+        requires_confirmation:
+          type: boolean
   securitySchemes:
     HolviClientId:
       type: apiKey
